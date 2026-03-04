@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RFID Wallet System - Team y2c_team0125</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .team-badge {
+        background: #4caf50;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .card h2 {
+        color: #333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #4caf50;
+      }
+
+      .btn {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        transition: background 0.3s;
+      }
+
+      .btn:hover {
+        background: #45a049;
+      }
+
+      .btn-pay {
+        background: #2196f3;
+      }
+
+      .btn-pay:hover {
+        background: #1976d2;
+      }
+
+      .balance-display {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 15px 0;
+        text-align: center;
+      }
+
+      .balance-display h3 {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .balance-display .amount {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .result {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .result.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        display: block;
+      }
+
+      .result.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        display: block;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+
+      th {
+        background: #f8f9fa;
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background: #f5f5f5;
+      }
+
+      .card-list {
+        margin-top: 20px;
+      }
+
+      .card-item {
+        background: #f8f9fa;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-uid {
+        font-family: monospace;
+        font-size: 14px;
+      }
+
+      .card-balance {
+        font-weight: bold;
+        color: #4caf50;
+      }
+
+      .status {
+        background: #ffc107;
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>RFID Wallet Transaction System</h1>
+      <div class="team-badge">Team ID: y2c_team0125</div>
+
+      <div class="dashboard">
+        <!-- Admin Panel - Top-Up -->
+        <div class="card">
+          <h2>👑 Admin - Top-Up Interface</h2>
+          <div class="form-group">
+            <label for="topup-uid">Card UID</label>
+            <input
+              type="text"
+              id="topup-uid"
+              placeholder="Enter card UID (e.g., A1B2C3D4)"
+            />
+          </div>
+
+          <div class="balance-display">
+            <h3>Previous Balance</h3>
+            <div class="amount" id="prev-balance-topup">---</div>
+          </div>
+
+          <div class="form-group">
+            <label for="topup-amount">Top-up Amount (RWF)</label>
+            <input
+              type="number"
+              id="topup-amount"
+              min="100"
+              step="100"
+              placeholder="Enter amount"
+            />
+          </div>
+
+          <button class="btn" id="topup-btn">💳 TOP UP</button>
+          <div class="result" id="topup-result"></div>
+        </div>
+
+        <!-- Cashier Panel - Payment -->
+        <div class="card">
+          <h2>🧑‍💼 Cashier - Payment Interface</h2>
+          <div class="form-group">
+            <label for="pay-uid">Card UID</label>
+            <input type="text" id="pay-uid" placeholder="Enter card UID" />
+          </div>
+
+          <div class="balance-display">
+            <h3>Previous Balance</h3>
+            <div class="amount" id="prev-balance-pay">---</div>
+          </div>
+
+          <div class="form-group">
+            <label for="product">Product/Service</label>
+            <select id="product">
+              <option value="">Select a product</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" min="1" value="1" />
+          </div>
+
+          <div class="balance-display">
+            <h3>Total Cost</h3>
+            <div class="amount" id="total-cost">0 RWF</div>
+          </div>
+
+          <button class="btn btn-pay" id="pay-btn">💰 PAY</button>
+          <div class="result" id="pay-result"></div>
+        </div>
+      </div>
+
+      <!-- Live Cards Status -->
+      <div class="card" style="margin-top: 20px">
+        <h2>📋 Live Cards Status</h2>
+        <div id="cards-list"></div>
+        <div class="status" id="ws-status">Connecting to WebSocket...</div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
